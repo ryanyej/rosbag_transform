@@ -23,8 +23,8 @@
 #include<string>
 #include "sensor_msgs/PointCloud2.h"
 
-std::string path="/home/jueleiye/old/";
-std::string new_path="/home/jueleiye/new/";
+std::string path="/home/user/old/";
+std::string new_path="/home/user/new/";
 
 ros::Publisher no_frame_id_lidar;
 Eigen::Matrix4f vec_pose_to_matrix(std::vector<double> &vec_pose)
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
             o_bag.open(new_path+ptr->d_name,rosbag::bagmode::Write);
             // p.reset(new pcl::visualization::PCLVisualizer(argc, argv, "Online PointCloud2 Viewer"));
             std::vector<std::string>topics;
-            topics.push_back(std::string("/mems_sensing/lidar/concatenated/pointcloud"));
+            topics.push_back(std::string("/rslidar_points"));
             rosbag::View view(i_bag,rosbag::TopicQuery(topics));
             for(auto m:view)
             {
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
                     out_cloud_ptr1->header.frame_id = "base_link";
                     sensor_msgs::PointCloud2 t_rosCloud;
                     pcl::toROSMsg(*out_cloud_ptr1,t_rosCloud);
-                    o_bag.write("/mems_sensing/lidar/concatenated/pointcloud",mems->header.stamp,t_rosCloud);
+                    o_bag.write("rslidar_points",mems->header.stamp,t_rosCloud);
                 }
             }
             ROS_INFO("Finished transform %s",ptr->d_name);
